@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Your Aadhaar No",
+    "name": "aadhaarNumber",
+    "type": "text",
+    "placeholder": "Your Aadhaar No"
+  },
+  {
+    "label": "Name as per Aadhaar",
+    "name": "nameAsPerAadhaar",
+    "type": "text",
+    "placeholder": "Name as per Aadhaar"
+  },
+  {
+    "label": "Your PAN No",
+    "name": "panNumber",
+    "type": "text",
+    "placeholder": "Your PAN No"
+  }
+]
