@@ -8,7 +8,7 @@ const { Pool } = require('pg');
 const { validate } = require('./validator');
 
 // Vercel frontend ka URL
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://udyam-project-frontend.vercel.app';
 
 // CORS Middleware ko sahi se configure karo
 const corsOptions = {
