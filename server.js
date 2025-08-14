@@ -1,23 +1,33 @@
+// server.js
 const express = require('express');
 const fs = require('fs');
 const app = express();
 const PORT = 3000;
 const cors = require('cors');
 const { Pool } = require('pg');
-const { validate } = require('./validator'); // Naya file import karo
+const { validate } = require('./validator');
+
+// Vercel frontend ka URL
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+// CORS Middleware ko sahi se configure karo
+const corsOptions = {
+  origin: FRONTEND_URL,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Middleware to handle JSON and URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
 
-// Configure PostgreSQL connection
+// Configure PostgreSQL connection using environment variables
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'udyam',
-  password: 'YOUR_POSTGRES_PASSWORD', // Apna password yahan daalo
-  port: 5432,
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
 });
 
 // API route for React frontend to get form fields
@@ -35,7 +45,6 @@ app.post('/api/submit', async (req, res) => {
   try {
     const submittedData = req.body;
     
-    // Naya validation function call karo
     const validationError = validate(submittedData);
     if (validationError) {
       return res.status(400).json({ error: validationError });
@@ -43,7 +52,6 @@ app.post('/api/submit', async (req, res) => {
 
     const { aadhaarNumber, panNumber } = submittedData;
     
-    // Save data to PostgreSQL
     const queryText =
       'INSERT INTO registrations (aadhaar, pan, payload) VALUES ($1, $2, $3) RETURNING id';
     const values = [aadhaarNumber, panNumber, submittedData];
@@ -57,9 +65,10 @@ app.post('/api/submit', async (req, res) => {
   }
 });
 
-// Old HTML route
 app.get('/', (req, res) => {
   res.send('<h1>Server is running! Please use the React frontend.</h1>');
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+const server = app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+
+module.exports = server;
