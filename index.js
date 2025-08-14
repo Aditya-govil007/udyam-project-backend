@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 
 (async () => {
   console.log("🚀 Launching browser...");
-  const browser = await chromium.launch({ headless: false }); // headless false so we can see it
+  const browser = await chromium.launch({ headless: false }); 
   const page = await browser.newPage();
   
   console.log("🌐 Opening Udyam site...");
